@@ -90,14 +90,26 @@ services:
       airflow-init:
         condition: service_completed_successfully # <--- CẬP NHẬT DÒNG NÀY
 
-  # --- 7. AIRFLOW SCHEDULER ---
+# --- 7. AIRFLOW SCHEDULER ---
   airflow-scheduler:
     <<: *airflow-common
     container_name: airflow_scheduler
     command: scheduler
     depends_on:
       airflow-init:
-        condition: service_completed_successfully # <--- CẬP NHẬT DÒNG NÀY
+        condition: service_completed_successfully
 
+  # --- 8. SPARK STREAMING PROCESSOR ---
+  spark-processor:
+    build:
+      context: .
+      dockerfile: Dockerfile.spark
+    container_name: traffic_spark_processor
+    depends_on:
+      - kafka
+    environment:
+      - PYTHONUNBUFFERED=1
+
+# CHỮ VOLUMES PHẢI NẰM DƯỚI CÙNG VÀ SÁT LỀ TRÁI
 volumes:
   postgres_data:
