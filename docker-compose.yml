@@ -1,3 +1,5 @@
+version: '3.8'
+
 x-airflow-common:
   &airflow-common
   image: apache/airflow:2.8.1
@@ -7,7 +9,7 @@ x-airflow-common:
     - AIRFLOW__CORE__EXECUTOR=LocalExecutor
     - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@postgres/airflow
     - AIRFLOW__CORE__LOAD_EXAMPLES=False
-    - _PIP_ADDITIONAL_REQUIREMENTS=kafka-python requests
+    - _PIP_ADDITIONAL_REQUIREMENTS=kafka-python requests minio
   volumes:
     - ./dags:/opt/airflow/dags
     - ./src:/opt/airflow/src
@@ -17,7 +19,7 @@ x-airflow-common:
     - postgres
 
 services:
-  # --- 1. ZOOKEEPER (Bắt buộc đi kèm với Confluent Kafka) ---
+  # --- 1. ZOOKEEPER ---
   zookeeper:
     image: confluentinc/cp-zookeeper:7.5.0
     container_name: traffic_zookeeper
@@ -27,7 +29,7 @@ services:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
 
-  # --- 2. KAFKA BROKER (Dùng bản của Confluent) ---
+  # --- 2. KAFKA BROKER ---
   kafka:
     image: confluentinc/cp-kafka:7.5.0
     container_name: traffic_kafka
@@ -41,9 +43,9 @@ services:
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
       KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true" # Vẫn giữ tính năng tự tạo Topic khi có data đẩy vào
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
 
-  # --- 3. KAFKA UI (Giao diện xem dữ liệu trực tiếp) ---
+  # --- 3. KAFKA UI ---
   kafka-ui:
     image: provectuslabs/kafka-ui:latest
     container_name: kafka_ui
@@ -63,10 +65,12 @@ services:
       - POSTGRES_USER=airflow
       - POSTGRES_PASSWORD=airflow
       - POSTGRES_DB=airflow
+    ports:
+      - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
-# --- 5. AIRFLOW INIT ---
+  # # --- 5. AIRFLOW INIT ---
   airflow-init:
     <<: *airflow-common
     container_name: airflow_init
@@ -74,7 +78,7 @@ services:
       bash -c "airflow db migrate && 
       airflow users create --role Admin --username admin --password admin --email admin@example.com --firstname Admin --lastname User"
 
-# --- 6. AIRFLOW WEBSERVER ---
+  # --- 6. AIRFLOW WEBSERVER ---
   airflow-webserver:
     <<: *airflow-common
     container_name: airflow_webserver
@@ -88,9 +92,9 @@ services:
       retries: 5
     depends_on:
       airflow-init:
-        condition: service_completed_successfully # <--- CẬP NHẬT DÒNG NÀY
+        condition: service_completed_successfully
 
-# --- 7. AIRFLOW SCHEDULER ---
+  # --- 7. AIRFLOW SCHEDULER ---
   airflow-scheduler:
     <<: *airflow-common
     container_name: airflow_scheduler
@@ -99,17 +103,62 @@ services:
       airflow-init:
         condition: service_completed_successfully
 
-  # --- 8. SPARK STREAMING PROCESSOR ---
+
+# --- 8. MINIO (DATA LAKE - S3 COMPATIBLE) ---
+  minio:
+    image: minio/minio:latest
+    container_name: traffic_minio
+    ports:
+      - "9000:9000" # Port API cho code gọi
+      - "9001:9001" # Port UI để xem trên trình duyệt
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    command: server /data --console-address ":9001"
+    volumes:
+      - minio_data:/data
+
+  # --- 9. MINIO INIT (Tự động tạo Bucket "raw-data-lake") ---
+  minio-init:
+    image: minio/mc:latest
+    container_name: traffic_minio_init
+    depends_on:
+      - minio
+    entrypoint: >
+      /bin/sh -c "
+      sleep 5;
+      mc alias set myminio http://minio:9000 minioadmin minioadmin;
+      mc mb myminio/raw-data-lake || true;
+      mc anonymous set public myminio/raw-data-lake;
+      exit 0;
+      "
+# --- 10. SPARK STREAMING PROCESSOR ---
   spark-processor:
     build:
       context: .
       dockerfile: Dockerfile.spark
     container_name: traffic_spark_processor
+    restart: on-failure
     depends_on:
       - kafka
+      - postgres
     environment:
       - PYTHONUNBUFFERED=1
 
-# CHỮ VOLUMES PHẢI NẰM DƯỚI CÙNG VÀ SÁT LỀ TRÁI
+# --- 11. AI WORKER (Chạy độc lập 24/7) ---
+  ai-worker:
+    build:
+      context: .
+      dockerfile: Dockerfile.ai
+    container_name: traffic_ai_worker
+    restart: always
+    depends_on:
+      - kafka
+    volumes:
+      - ./src:/app/src
+      - ./data:/opt/airflow/data  # Share chung ổ cứng để AI đọc được ảnh do Airflow tải về
+    command: python /app/src/ai_worker/main.py
+
 volumes:
   postgres_data:
+  minio_data:

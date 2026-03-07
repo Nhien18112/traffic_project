@@ -21,7 +21,6 @@ with DAG(
     tags=['ingestion', 'traffic', 'realtime'],
 ) as dag:
 
-    # Khai báo các đường dẫn đến file script trong container
     SCRIPT_DIR = '/opt/airflow/src/ingestion'
 
     task_hcm_traffic = BashOperator(
@@ -39,5 +38,4 @@ with DAG(
         bash_command=f'python {SCRIPT_DIR}/fetch_weather.py ',
     )
 
-    # Chạy 3 task song song
     [task_hcm_traffic, task_tomtom, task_weather]

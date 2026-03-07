@@ -1,9 +1,7 @@
-# --- BẢO MẬT (Quan trọng nhất) ---
-# Không bao giờ đẩy file chứa API Key lên GitHub
+
 .env
 
 # --- DỮ LIỆU (Data Lake) ---
-# Không đẩy các ảnh camera đã tải về và dữ liệu thô
 data/
 logs/
 *.jpg
@@ -13,12 +11,10 @@ logs/
 *.csv
 
 # --- DOCKER & KAFKA ---
-# Không đẩy dữ liệu lưu trữ của database và kafka
 postgres_data/
 kafka_data/
 
 # --- PYTHON ---
-# Các file rác khi chạy Python
 __pycache__/
 *.py[cod]
 *$py.class

@@ -1,19 +1,14 @@
-# Dùng môi trường Python nhẹ nhàng
 FROM python:3.9-slim
 
-# Cài đặt Java (Bắt buộc phải có để chạy được Apache Spark)
 RUN apt-get update && \
     apt-get install -y default-jre-headless && \
     apt-get clean;
 
 WORKDIR /app
 
-# Copy file requirements và cài đặt PySpark
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy toàn bộ code vào trong container
 COPY ./src /app/src
 
-# Lệnh mặc định khi container chạy
 CMD ["python", "src/streaming/spark_processor.py"]
