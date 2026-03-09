@@ -142,6 +142,8 @@ services:
     depends_on:
       - kafka
       - postgres
+    env_file:       
+      - .env
     environment:
       - PYTHONUNBUFFERED=1
 
