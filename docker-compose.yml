@@ -3,7 +3,7 @@ version: '3.8'
 x-airflow-common:
   &airflow-common
   image: apache/airflow:2.8.1
-  env_file:                 
+  env_file:
     - .env
   environment:
     - AIRFLOW__CORE__EXECUTOR=LocalExecutor
@@ -19,6 +19,7 @@ x-airflow-common:
     - postgres
 
 services:
+
   # --- 1. ZOOKEEPER ---
   zookeeper:
     image: confluentinc/cp-zookeeper:7.5.0
@@ -70,12 +71,12 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
-  # # --- 5. AIRFLOW INIT ---
+  # --- 5. AIRFLOW INIT ---
   airflow-init:
     <<: *airflow-common
     container_name: airflow_init
     command: >
-      bash -c "airflow db migrate && 
+      bash -c "airflow db migrate &&
       airflow users create --role Admin --username admin --password admin --email admin@example.com --firstname Admin --lastname User"
 
   # --- 6. AIRFLOW WEBSERVER ---
@@ -103,14 +104,13 @@ services:
       airflow-init:
         condition: service_completed_successfully
 
-
-# --- 8. MINIO (DATA LAKE - S3 COMPATIBLE) ---
+  # --- 8. MINIO ---
   minio:
     image: minio/minio:latest
     container_name: traffic_minio
     ports:
-      - "9000:9000" # Port API cho code gọi
-      - "9001:9001" # Port UI để xem trên trình duyệt
+      - "9000:9000"
+      - "9001:9001"
     environment:
       MINIO_ROOT_USER: minioadmin
       MINIO_ROOT_PASSWORD: minioadmin
@@ -118,7 +118,7 @@ services:
     volumes:
       - minio_data:/data
 
-  # --- 9. MINIO INIT (Tự động tạo Bucket "raw-data-lake") ---
+  # --- 9. MINIO INIT ---
   minio-init:
     image: minio/mc:latest
     container_name: traffic_minio_init
@@ -132,7 +132,8 @@ services:
       mc anonymous set public myminio/raw-data-lake;
       exit 0;
       "
-# --- 10. SPARK STREAMING PROCESSOR ---
+
+  # --- 10. SPARK STREAMING PROCESSOR ---
   spark-processor:
     build:
       context: .
@@ -142,12 +143,12 @@ services:
     depends_on:
       - kafka
       - postgres
-    env_file:       
+    env_file:
       - .env
     environment:
       - PYTHONUNBUFFERED=1
 
-# --- 11. AI WORKER (Chạy độc lập 24/7) ---
+  # --- 11. AI WORKER ---
   ai-worker:
     build:
       context: .
@@ -158,8 +159,33 @@ services:
       - kafka
     volumes:
       - ./src:/app/src
-      - ./data:/opt/airflow/data  # Share chung ổ cứng để AI đọc được ảnh do Airflow tải về
+      - ./data:/opt/airflow/data
     command: python /app/src/ai_worker/main.py
+
+  # --- 12. FASTAPI SERVING (MỚI) ---
+  api-serving:
+    build:
+      context: .
+      dockerfile: Dockerfile.serving
+    container_name: traffic_api_serving
+    restart: always
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    environment:
+      - PYTHONUNBUFFERED=1
+
+  # --- 13. WEB UI ---
+  web-ui:
+    image: nginx:alpine
+    container_name: traffic_web_ui
+    ports:
+      - "3000:80"
+    volumes:
+      - ./src/serving/index.html:/usr/share/nginx/html/index.html
+      - ./src/serving/style.css:/usr/share/nginx/html/style.css
+      - ./src/serving/app.js:/usr/share/nginx/html/app.js
 
 volumes:
   postgres_data:
