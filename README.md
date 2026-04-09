@@ -63,12 +63,35 @@ Vehicle counts are extracted from camera images using a **YOLOv8** object detect
 
 ## 📍 Monitored Locations
 
+Map: https://www.google.com/maps/d/u/0/edit?mid=1Ic6AgHtYSf2DEyzaeFdfbt9qS31hmwE&usp=sharing
+
 | Location | Coordinates |
 |---|---|
 | Ngã Tư Hàng Xanh | 10.8015, 106.7111 |
 | Vòng Xoay Lăng Cha Cả | 10.8023, 106.6603 |
 | Cầu Kênh Tẻ | 10.7523, 106.6972 |
 | Ngã Tư Thủ Đức | 10.8504, 106.7716 |
+| Nút Giao Lý Thường Kiệt - 3 Tháng 2 | 10.763875, 106.660007 |
+| Nút Giao Bắc Hải - Thành Thái | 10.78082, 106.65883 |
+| Ngã Tư Thành Thái - Tô Hiến Thành | 10.77639, 106.66353 |
+| Nút Giao 3 Tháng 2 - Thành Thái | 10.76778, 106.66702 |
+| Nút Giao Sư Vạn Hạnh - Tô Hiến Thành | 10.77795, 106.66557 |
+| Nút Giao 3 Tháng 2 - Sư Vạn Hạnh | 10.76962, 106.67076 |
+| Nút Giao CMT8 - Điện Biên Phủ | 10.77676, 106.68371 |
+| Nút Giao Cao Thắng - Điện Biên Phủ | 10.77276, 106.679 |
+| Nút Giao 3 Tháng 2 - Lê Hồng Phong | 10.77091, 106.67311 |
+| Nút Giao 3 Tháng 2 - Cao Thắng | 10.77381, 106.67778 |
+| Nút Giao 3 Tháng 2 - Lý Thái Tổ | 10.7681, 106.66803 |
+| Bùng binh Lý Thái Tổ | 10.76776, 106.67418 |
+| Nút Giao Trường Chinh - Âu Cơ | 10.80184, 106.63674 |
+| Nút Giao 3 Tháng 2 - Lê Đại Hành | 10.76226, 106.65707 |
+| Nút Giao Lạc Long Quân - Lý Thường Kiệt | 10.79034, 106.65236 |
+| Nút Giao Lạc Long Quân - Âu Cơ | 10.77478, 106.64798 |
+| Nút Giao Lữ Gia - Nguyễn Thị Nhỏ | 10.77115, 106.65292 |
+| Nút Giao Âu Cơ - Nguyễn Thị Nhỏ | 10.76906, 106.65226 |
+| Đường Âu Cơ | 10.78938, 106.6404 |
+| Nút Giao Cộng Hòa - Hoàng Hoa Thám | 10.80184, 106.64742 |
+| Nút Giao Trường Chinh - Hoàng Hoa Thám | 10.79637, 106.64694 |
 
 ---
 
