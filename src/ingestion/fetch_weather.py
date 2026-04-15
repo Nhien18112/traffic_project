@@ -14,7 +14,29 @@ LOCATIONS = {
     "Nga_Tu_Hang_Xanh": {"lat": "10.8015", "lon": "106.7111"},
     "Vong_Xoay_Lang_Cha_Ca": {"lat": "10.8023", "lon": "106.6603"},
     "Cau_Kenh_Te": {"lat": "10.7523", "lon": "106.6972"},
-    "Nga_Tu_Thu_Duc": {"lat": "10.8504", "lon": "106.7716"}
+    "Nga_Tu_Thu_Duc": {"lat": "10.8504", "lon": "106.7716"},
+    "Nut_Giao_Ly_Thuong_Kiet_3Thang2": {"lat": "10.763875", "lon": "106.660007"},
+    "Nut_Giao_Bac_Hai_Thanh_Thai": {"lat": "10.78082", "lon": "106.65883"},
+    "Nga_Tu_Thanh_Thai_To_Hien_Thanh": {"lat": "10.77639", "lon": "106.66353"},
+    "Nut_Giao_3Thang2_Thanh_Thai": {"lat": "10.76778", "lon": "106.66702"},
+    "Nut_Giao_Su_Van_Hanh_To_Hien_Thanh": {"lat": "10.77795", "lon": "106.66557"},
+    "Nut_Giao_3Thang2_Su_Van_Hanh": {"lat": "10.76962", "lon": "106.67076"},
+    "Nut_Giao_CMT8_Dien_Bien_Phu": {"lat": "10.77676", "lon": "106.68371"},
+    "Nut_Giao_Cao_Thang_Dien_Bien_Phu": {"lat": "10.77276", "lon": "106.679"},
+    "Nut_Giao_3Thang2_Le_Hong_Phong": {"lat": "10.77091", "lon": "106.67311"},
+    "Nut_Giao_3Thang2_Cao_Thang": {"lat": "10.77381", "lon": "106.67778"},
+    "Nut_Giao_3Thang2_Ly_Thai_To": {"lat": "10.7681", "lon": "106.66803"},
+    "Bung_binh_Ly_Thai_To": {"lat": "10.76776", "lon": "106.67418"},
+    "Nut_Giao_Truong_Chinh_Au_Co": {"lat": "10.80184", "lon": "106.63674"},
+    "Nut_Giao_3Thang2_Le_Dai_Hanh": {"lat": "10.76226", "lon": "106.65707"},
+    "Nut_Giao_Lac_Long_Quan_Ly_Thuong_Kiet": {"lat": "10.79034", "lon": "106.65236"},
+    "Nut_Giao_Lac_Long_Quan_Au_Co": {"lat": "10.77478", "lon": "106.64798"},
+    "Nut_Giao_Lu_Gia_Nguyen_Thi_Nho": {"lat": "10.77115", "lon": "106.65292"},
+    "Nut_Giao_Au_Co_Nguyen_Thi_Nho": {"lat": "10.76906", "lon": "106.65226"},
+    "Duong_Au_Co": {"lat": "10.78938", "lon": "106.6404"},
+    "Nut_Giao_Cong_Hoa_Hoang_Hoa_Tham": {"lat": "10.80184", "lon": "106.64742"},
+    "Nut_Giao_Truong_Chinh_Hoang_Hoa_Tham": {"lat": "10.79637", "lon": "106.64694"},
+    "Nut_Giao_Truong_Chinh_Cong_Hoa": {"lat": "10.80751", "lon": "106.63481"}
 }
 
 def main():

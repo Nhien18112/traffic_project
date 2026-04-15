@@ -35,7 +35,8 @@ LOCATIONS = {
     "Nut_Giao_Au_Co_Nguyen_Thi_Nho": {"lat": "10.76906", "lon": "106.65226"},
     "Duong_Au_Co": {"lat": "10.78938", "lon": "106.6404"},
     "Nut_Giao_Cong_Hoa_Hoang_Hoa_Tham": {"lat": "10.80184", "lon": "106.64742"},
-    "Nut_Giao_Truong_Chinh_Hoang_Hoa_Tham": {"lat": "10.79637", "lon": "106.64694"}
+    "Nut_Giao_Truong_Chinh_Hoang_Hoa_Tham": {"lat": "10.79637", "lon": "106.64694"},
+    "Nut_Giao_Truong_Chinh_Cong_Hoa": {"lat": "10.80751", "lon": "106.63481"}
 }
 
 def main():
