@@ -1,6 +1,14 @@
 
 .env
 
+# --- FRONTEND BUILD ---
+web-ui/node_modules/
+web-ui/dist/
+
+# --- RUNTIME LOGS/ARTIFACTS ---
+*.log
+logs.txt
+
 # --- DỮ LIỆU (Data Lake) ---
 data/
 logs/
